@@ -1,39 +1,38 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Container, Form } from "./styles"; 
+import { Container, Form } from "./styles"
 
 import { auth } from "../../firebaseConnection";
-import { signInWithEmailAndPassword } from "firebase/auth";
- 
-export function Home(){
+import { createUserWithEmailAndPassword} from "firebase/auth";
+
+
+export function Register(){
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  
+
   const navigate = useNavigate();
 
   async function handleRegister(e){
     e.preventDefault();
 
     if(email !== "" && password !== ""){
-
-      await signInWithEmailAndPassword(auth, email, password)
-      .then(() =>{
-        navigate("/admin", {replace: true})
-      })
-      .catch((error) =>{
-        console.log(error);
-      }) 
-
+     await createUserWithEmailAndPassword(auth, email, password)
+     .then(() => {
+      alert("Usuário cadastrado com sucesso!")
+      navigate("/admin", {replace: true})
+     })
+     .catch((error) =>{
+      console.log(error);
+     })
     }else{
       alert("Todos os campos precisam ser preenchidos!");   
     }
-
   }
-
+  
   return(
     <Container>
-      <h1>Lista de tarefas</h1>
-      <span>Gerencie sua agenda de forma fácil.</span>
+      <h1>Cadastre-se</h1>
+      <span>Vamos criar sua conta.</span>
 
       <Form onSubmit={handleRegister}>
 
@@ -55,12 +54,12 @@ export function Home(){
         onChange={(e) => setPassword(e.target.value) }
         />
 
-        <button type="submit">Acessar</button>
+        <button type="submit">Cadastrar</button>
 
       </Form>
 
-      <Link to="/register">Não possui uma conta? Cadastre-se</Link>
-
+      <Link to="/">Já possui uma conta? Faça o Login!</Link>
+      
     </Container>
   )
 }
